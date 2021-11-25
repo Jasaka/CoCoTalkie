@@ -1,0 +1,18 @@
+* {
+    font-family: "Open Sans";
+    font-size: 1em;
+    background: #000000;
+    color: #ffffff;
+}
+
+body{
+    padding: 1em;
+}
+
+input {
+    color: #5fff48;
+}
+
+button {
+    border-radius: 1em;
+}

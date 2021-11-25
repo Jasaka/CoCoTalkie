@@ -14,8 +14,12 @@
   "author": "Jasaka & Rodin",
   "license": "ISC",
   "dependencies": {
+    "connect-livereload": "^0.6.1",
     "express": "^4.17.1",
     "jest": "^27.3.1",
+    "livereload": "^0.9.3",
+    "path": "^0.12.7",
+    "prettier": "^2.4.1",
     "socket.io": "^4.4.0"
   }
 }

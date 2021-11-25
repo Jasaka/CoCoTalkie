@@ -1,6 +1,6 @@
 let socket;
 
-socket = io.connect('http://localhost:3000');
+socket = io.connect();
 
 function sendMessage() {
     socket.emit('message', "AAAAAAHHHHHHHH");
@@ -9,3 +9,8 @@ function sendMessage() {
 function sendBoop(){
     socket.emit('boop', 'boop');
 }
+
+socket.on('clientNumber', (clientNumber) => {
+    console.log(clientNumber);
+    document.getElementById("clientnumber").innerHTML = clientNumber.toString()
+});

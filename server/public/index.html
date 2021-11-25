@@ -1,16 +1,22 @@
 <html>
 <head>
-    <title>Uff</title>
-    <script src="https://cdn.socket.io/4.4.0/socket.io.min.js"
-            integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj"
-            crossorigin="anonymous"></script>
-    <script src="client.js"></script>
-    <link rel="stylesheet" href="styles.css">
+	<title>Uff</title>
+	<script src="https://cdn.socket.io/4.4.0/socket.io.min.js"
+					integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj"
+					crossorigin="anonymous"></script>
+	<script src="client.js"></script>
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-Clientnumber: <text id="clientnumber">1</text>
-<br /><br />
-    <input type="">
-    <button onclick="sendMessage()">AAAAAAHHHHHHHH</button>
+Number of connected Clients:
+<text id="clientnumber">1</text>
+<br/>
+Your client name:
+<text id="clientname">Blubb</text>
+<br/><br/>
+<input id="nameinput">
+<button onclick="setName()">Set new Client Name</button>
+<br/><br/>
+<button onclick="sendBoop()">Boop</button>
 </body>
 </html>

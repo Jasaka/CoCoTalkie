@@ -26,9 +26,9 @@ function newConnection(socket) {
     clientNumber = io.sockets.sockets.size;
     socket.emit('clientNumber', clientNumber);
     socket.broadcast.emit('clientNumber', clientNumber);
-    socket.on('message', reactToMessage)
+    socket.on('setName', setClientName)
 
-    function reactToMessage(message) {
-        console.log(message);
+    function setClientName(newName) {
+        console.log(newName);
     }
 }

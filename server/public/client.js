@@ -2,8 +2,9 @@ let socket;
 
 socket = io.connect();
 
-function sendMessage() {
-    socket.emit('message', "AAAAAAHHHHHHHH");
+function setName() {
+    socket.emit('setName', document.getElementById('nameinput').value);
+    document.getElementById("clientname").innerHTML = document.getElementById('nameinput').value;
 }
 
 function sendBoop(){

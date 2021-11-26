@@ -27,7 +27,7 @@ function newConnection(socket) {
 
     let isSendingSound = false;
 
-    clientNumber = io.sockets.sockets.size;
+    setClientNumber();
     socket.emit('clientNumber', clientNumber);
     socket.broadcast.emit('clientNumber', clientNumber);
     socket.on('setName', setClientName);
@@ -38,11 +38,12 @@ function newConnection(socket) {
     });
     socket.on('stopSound', () => isSendingSound = false);
     socket.on("disconnect", () => {
-        clientNumber = io.sockets.sockets.size;
+        setClientNumber();
     });
 
     function setClientName(newName) {
         clientMap.set(socket.id, newName);
+        socket.emit('refreshName', clientMap.get(socket.id));
     }
 
     function playBoop() {
@@ -51,5 +52,9 @@ function newConnection(socket) {
 
     function sendSound() {
         socket.broadcast.emit('playSound', "Here be Audio streaming using webRTC or something like it");
+    }
+
+    function setClientNumber(){
+        clientNumber = io.sockets.sockets.size;
     }
 }

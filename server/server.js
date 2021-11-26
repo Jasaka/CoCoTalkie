@@ -3,6 +3,7 @@ const express = require('express');
 const livereload = require("livereload");
 const connectLivereload = require("connect-livereload");
 const socket = require('socket.io');
+const {generateName} = require("./public/namegenerator");
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, 'public'));
@@ -24,7 +25,7 @@ io.sockets.on('connection', newConnection);
 
 function newConnection(socket) {
     console.log("new connection: " + socket.id);
-
+    setClientName(generateName());
     let isSendingSound = false;
 
     setClientNumber();

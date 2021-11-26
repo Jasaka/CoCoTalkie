@@ -50,9 +50,6 @@ function newConnection(socket) {
     }
 
     function sendSound() {
-        while (isSendingSound) {
-            socket.broadcast.emit('playSound', {value: "Here be Audio streaming using webRTC or something like it"});
-        }
+        socket.broadcast.emit('playSound', "Here be Audio streaming using webRTC or something like it");
     }
-
 }

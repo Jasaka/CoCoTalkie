@@ -40,6 +40,6 @@ socket.on('playBoop', (sentFromClientName) => {
 });
 
 socket.on('playSound', (data) => {
-    console.log(data.value);
+    console.log(data);
 })
 

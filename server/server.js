@@ -37,6 +37,9 @@ function newConnection(socket) {
         sendSound();
     });
     socket.on('stopSound', () => isSendingSound = false);
+    socket.on("disconnect", () => {
+        clientNumber = io.sockets.sockets.size;
+    });
 
     function setClientName(newName) {
         clientMap.set(socket.id, newName);

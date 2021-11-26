@@ -8,7 +8,7 @@ const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, 'public'));
 
 const app = express();
-const server = app.listen(3000);
+const server = app.listen(64046);
 app.use(connectLivereload());
 
 app.use(express.static('public'));

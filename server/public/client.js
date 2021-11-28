@@ -24,8 +24,18 @@ socket.on('refreshName', (newName) => {
 })
 
 function setName() {
-    socket.emit('setName', document.getElementById('nameinput').value);
-    refreshName(document.getElementById('nameinput').value);
+    const nameFromInput = document.getElementById('nameinput').value;
+
+    if (nameFromInput){
+        socket.emit('setName', nameFromInput);
+        refreshName(nameFromInput);
+    } else{
+        alert("Please input a Username if you want to set one!")
+    }
+}
+
+function sendName(name) {
+    socket.emit('setName', name);
 }
 
 function sendBoop(){

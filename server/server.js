@@ -3,7 +3,7 @@ const express = require('express');
 const livereload = require("livereload");
 const connectLivereload = require("connect-livereload");
 const socket = require('socket.io');
-const {generateName} = require("./public/namegenerator");
+const namegenerator = require('./namegenerator');
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, 'public'));
@@ -17,7 +17,6 @@ app.use(express.static('public'));
 console.log("Server is running");
 
 let clientNumber;
-const clientMap = new Map();
 
 const io = socket(server);
 
@@ -25,7 +24,7 @@ io.sockets.on('connection', newConnection);
 
 function newConnection(socket) {
     console.log("new connection: " + socket.id);
-    setClientName(generateName());
+    setClientName(namegenerator());
     let isSendingSound = false;
 
     setClientNumber();
@@ -43,12 +42,12 @@ function newConnection(socket) {
     });
 
     function setClientName(newName) {
-        clientMap.set(socket.id, newName);
-        socket.emit('refreshName', clientMap.get(socket.id));
+        socket.username = newName;
+        socket.emit('refreshName', socket.username);
     }
 
     function playBoop() {
-        socket.broadcast.emit('playBoop', clientMap.get(socket.id));
+        socket.broadcast.emit('playBoop', socket.username);
     }
 
     function sendSound() {

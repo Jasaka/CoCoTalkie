@@ -1,3 +1,5 @@
+const verbose = false;
+
 const path = require("path");
 const express = require('express');
 const livereload = require("livereload");
@@ -14,7 +16,7 @@ app.use(connectLivereload());
 
 app.use(express.static('public'));
 
-console.log("Server is running");
+verbose && console.log("Server is running");
 
 let clientNumber;
 
@@ -23,7 +25,7 @@ const io = socket(server);
 io.sockets.on('connection', newConnection);
 
 function newConnection(socket) {
-    console.log("new connection: " + socket.id);
+    verbose && console.log("new connection: " + socket.id);
     setClientName(namegenerator());
 
     setClientNumber();

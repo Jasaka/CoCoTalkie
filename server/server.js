@@ -25,18 +25,13 @@ io.sockets.on('connection', newConnection);
 function newConnection(socket) {
     console.log("new connection: " + socket.id);
     setClientName(namegenerator());
-    let isSendingSound = false;
 
     setClientNumber();
-    socket.emit('clientNumber', clientNumber);
     socket.broadcast.emit('clientNumber', clientNumber);
     socket.on('setName', setClientName);
     socket.on('boop', playBoop);
-    socket.on('startSound', () => {
-        isSendingSound = true;
-        sendSound();
-    });
-    socket.on('stopSound', () => isSendingSound = false);
+    socket.on('startSound', sendSound);
+    socket.on('stopSound', stopSound);
     socket.on("disconnect", () => {
         setClientNumber();
     });
@@ -51,10 +46,18 @@ function newConnection(socket) {
     }
 
     function sendSound() {
-        socket.broadcast.emit('playSound', "Here be Audio streaming using webRTC or something like it");
+        socket.broadcast.emit('openReceivingConnection', {
+            clientName: socket.username,
+            data: "Here be Audio streaming using webRTC or something like it"
+        });
     }
 
-    function setClientNumber(){
+    function stopSound() {
+        socket.broadcast.emit('closeReceivingConnection');
+    }
+
+    function setClientNumber() {
         clientNumber = io.sockets.sockets.size;
+        socket.broadcast.emit('clientNumber', clientNumber);
     }
 }

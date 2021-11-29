@@ -7,18 +7,29 @@
 	<link rel="stylesheet" href="styles.css">
 </head>
 	<body>
-		Number of connected Clients:
-		<text id="clientnumber">1</text>
-		<br/>
-		Your client name:
-		<text id="clientname">Blubb</text>
-		<br/><br/>
-		<input id="nameinput">
-		<button onclick="setName()">Set new Client Name</button>
-		<br/><br/>
-		<button onclick="sendBoop()">Boop everyone else</button>
-		<br/><br/>
-		<button onmousedown="sendSound()" onmouseup="stopSound()">Hold to send</button>
-		<script src="client.js"></script>
+		<div id="toast" class="hidden">
+			Currently speaking:<br />
+			<text id="speaker" class="name">None</text>
+		</div>
+		<div id="viewport">
+			<header class="name">CoCoTalkie</header>
+			<main>
+				<fieldset>
+				Your client name:<br />
+				<text id="client" class="name">Blubb</text>
+				<br/><br/>
+				<input id="nameinput"><br />
+				<button onclick="setName()">Set new Client Name</button>
+				</fieldset>
+					<br/><br/>
+				<button onclick="sendBoop()">Boop everyone else</button>
+				<br/><br/>
+				<button id="broadcast-button" onmousedown="sendSound()" onmouseup="stopSound()">Hold to send</button>
+				<script src="client.js"></script>
+			</main>
+			<footer>
+				Number of connected Clients:	<text id="clientnumber">1</text><br />
+				<a href="https://coco.study">CoCo</a> @ <a href="https://th-koeln.de">TH-Köln</a></footer>
+		</div>
 	</body>
 </html>

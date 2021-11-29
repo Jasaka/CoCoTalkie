@@ -1,6 +1,16 @@
 let socket;
-
 socket = io.connect();
+
+const broadcastButton = document.getElementById("broadcast-button");
+broadcastButton.addEventListener("touchstart", sendSound, false);
+broadcastButton.addEventListener("touchend", stopSound, false);
+broadcastButton.addEventListener("touchcancel", stopSound, false);
+
+document.getElementById('broadcast-button').oncontextmenu = (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    return false;
+};
 
 socket.on('clientNumber', (clientNumber) => {
     console.log(clientNumber);
@@ -23,6 +33,16 @@ socket.on('refreshName', (newName) => {
     refreshName(newName);
 })
 
+socket.on('openReceivingConnection', (connection) => {
+    document.getElementById("speaker").innerHTML = connection.clientName;
+    console.log(connection.data);
+    displayToast(true);
+})
+
+socket.on('closeReceivingConnection', () => {
+    displayToast(false);
+})
+
 function setName() {
     const nameFromInput = document.getElementById('nameinput').value;
 
@@ -34,16 +54,19 @@ function setName() {
     }
 }
 
-function sendName(name) {
-    socket.emit('setName', name);
-}
-
 function sendBoop(){
-    socket.emit('boop', 'boop');
+    socket.emit('boop');
 }
 
 function sendSound(){
     socket.emit('startSound');
+    document.addEventListener(
+        "mouseup",
+        () => {
+            stopSound();
+        },
+        { once: true }
+    );
 }
 
 function stopSound(){
@@ -51,5 +74,13 @@ function stopSound(){
 }
 
 function refreshName(newName){
-    document.getElementById("clientname").innerHTML = newName;
+    document.getElementById("client").innerHTML = newName;
+}
+function displayToast(state){
+    const toast = document.getElementById("toast");
+    if (state){
+        toast.classList.remove("hidden");
+    } else {
+        toast.classList.add("hidden");
+    }
 }

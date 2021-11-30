@@ -12,31 +12,57 @@
 	<script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
 </head>
 <body class="bg-gray-800">
+<div id="modal" class="bg-gray-700">
+	<h1 class="my-8">CoCoTalkie</h1>
+	<p>
+		Welcome to CoCoTalkie!
+		<br/>
+		<br/>
+		We need your permission to serve you Audio Content, please give it to us.
+	</p>
+	<button class="button bg-green-700 focus:bg-green-700 hover:bg-green-500 rounded py-2 px-4 my-8"
+					onmousedown="enableCoCoTalkie()">Let's go!
+	</button>
+	<br/>
+	<a href="https://coco.study">
+		<button class="button bg-red-700 hover:bg-red-500 focus:bg-red-700 rounded py-2 px-4 my-8">
+			I don't wanna
+		</button>
+	</a>
+
+</div>
 <div id="toast" class="bg-green-700 py-2 px-4 hidden">
 	<text>Currently speaking:</text>
 	<br/>
 	<text id="speaker" class="name">None</text>
 </div>
-	<header><h1 class="my-8">CoCoTalkie</h1></header>
-	<main>
-		<div class="w-auto inline-block border border-solid border-gray-300 rounded py-4 px-4">
-			Your client name:<br/>
-			<text id="client" class="name">Loading...</text>
-			<br/><br/>
-			<input class="rounded text-black my-2 mx-4" id="nameinput"><br />
-			<button class="button bg-gray-700 hover:bg-gray-500 focus:bg-gray-700 rounded py-2 px-4" onclick="setName()">Set new Client Name</button>
-		</div>
-		<br />
-		<button class="button bg-red-700 hover:bg-red-500 focus:bg-red-700 rounded py-2 px-4 my-8" onclick="sendBoop()">Alert Everyone</button>
-		<br />
-		<button class="button bg-green-700 focus:bg-green-700 hover:bg-green-500 rounded py-2 px-4" id="broadcast-button" onmousedown="sendSound()" onmouseup="stopSound()">Press to send</button>
-	</main>
-	<footer>
-		Number of connected Clients:
-		<text id="clientnumber">1</text>
-		<br/>
-		<a class="text-yellow-500 hover:text-yellow-300" href="https://coco.study">CoCo</a> @ <a class="text-purple-300 hover:text-purple-500" href="https://th-koeln.de">TH-Köln</a>
-	</footer>
+<header><h1 class="my-8">CoCoTalkie</h1></header>
+<main>
+	<div class="w-auto inline-block border border-solid border-gray-300 rounded py-4 px-4">
+		Your client name:<br/>
+		<text id="client" class="name">Loading...</text>
+		<br/><br/>
+		<input class="rounded text-black my-2 mx-4" id="nameinput"><br/>
+		<button class="button bg-gray-700 hover:bg-gray-500 focus:bg-gray-700 rounded py-2 px-4" onclick="setName()">Set new
+			Client Name
+		</button>
+	</div>
+	<br/>
+	<button class="button bg-red-700 hover:bg-red-500 focus:bg-red-700 rounded py-2 px-4 my-8" onclick="sendAlert()">Alert
+		Everyone
+	</button>
+	<br/>
+	<button class="button bg-green-700 focus:bg-green-700 hover:bg-green-500 rounded py-2 px-4" id="broadcast-button"
+					onmousedown="startTransmission()" onmouseup="stopTransmission()">Press to send
+	</button>
+</main>
+<footer>
+	Number of connected Clients:
+	<text id="clientnumber">1</text>
+	<br/>
+	<a class="text-yellow-500 hover:text-yellow-300" href="https://coco.study">CoCo</a> @ <a
+				class="text-purple-300 hover:text-purple-500" href="https://th-koeln.de">TH-Köln</a>
+</footer>
 <script src="client.js"></script>
 </body>
 </html>

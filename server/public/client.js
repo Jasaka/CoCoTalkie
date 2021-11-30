@@ -1,10 +1,21 @@
 let socket;
 socket = io.connect();
+let isTransmitting = false;
+let isReceivingTransmission = false;
+
+let audio;
+
+function enableCoCoTalkie() {
+    audio = document.createElement('audio');
+
+    const modal = document.getElementById("modal");
+    modal.classList.add("hidden");
+}
 
 const broadcastButton = document.getElementById("broadcast-button");
-broadcastButton.addEventListener("touchstart", sendSound, false);
-broadcastButton.addEventListener("touchend", stopSound, false);
-broadcastButton.addEventListener("touchcancel", stopSound, false);
+broadcastButton.addEventListener("touchstart", startTransmission, false);
+broadcastButton.addEventListener("touchend", stopTransmission, false);
+broadcastButton.addEventListener("touchcancel", stopTransmission, false);
 
 document.getElementById('broadcast-button').oncontextmenu = (event) => {
     event.preventDefault();
@@ -18,10 +29,10 @@ socket.on('clientNumber', (clientNumber) => {
 });
 
 socket.on('playBoop', (senderName) => {
-    playSound(senderName);
+    playAlert(senderName);
 });
 
-socket.on('playSound', (data) => {
+socket.on('playAlert', (data) => {
     console.log(data);
 })
 
@@ -30,12 +41,17 @@ socket.on('refreshName', (newName) => {
 })
 
 socket.on('openReceivingConnection', (connection) => {
-    console.log(connection.data);
+    isReceivingTransmission = true;
     displayToast(true, connection.senderName);
+    console.log(connection);
+    const blob = new Blob([connection.data], {'type': 'audio/ogg; codecs=opus'});
+    audio.src = window.URL.createObjectURL(blob);
+    audio.play();
 })
 
 socket.on('closeReceivingConnection', () => {
     displayToast(false);
+    isReceivingTransmission = false;
 })
 
 function setName() {
@@ -45,35 +61,68 @@ function setName() {
     refreshName(nameFromInput);
 }
 
-function sendBoop() {
-    socket.emit('boop');
+function sendAlert() {
+    socket.emit('alert');
 }
 
-function playSound(senderName){
+function playAlert(senderName) {
     displayToast(true, senderName);
 
     const synth = new Tone.Synth().toDestination();
     const now = Tone.now();
-    synth.triggerAttackRelease("C4", "8n", now);
-    synth.triggerAttackRelease("E4", "8n", now + 0.5);
-    synth.triggerAttackRelease("G4", "8n", now + 1);
+    synth.triggerAttackRelease("C6", "8n", now);
+    synth.triggerAttackRelease("G6", "8n", now + 0.1);
+    synth.triggerAttackRelease("C6", "8n", now + 0.2);
+    synth.triggerAttackRelease("G6", "8n", now + 0.3);
+    synth.triggerAttackRelease("C6", "8n", now + 0.4);
+    synth.triggerAttackRelease("G6", "8n", now + 0.5);
+    synth.triggerAttackRelease("C6", "8n", now + 0.6);
+    synth.triggerAttackRelease("G6", "8n", now + 0.7);
+    synth.triggerAttackRelease("C6", "8n", now + 0.8);
+    synth.triggerAttackRelease("G6", "8n", now + 0.9);
+    synth.triggerAttackRelease("C6", "8n", now + 1);
 
     synth.onsilence = () => displayToast(false);
 }
 
-function sendSound() {
-    socket.emit('startSound');
+function startTransmission() {
+    isTransmitting = true;
     document.addEventListener(
         "mouseup",
         () => {
-            stopSound();
+            stopTransmission();
         },
         {once: true}
     );
+
+    const constraints = {audio: true};
+    navigator.mediaDevices.getUserMedia(constraints).then(function (mediaStream) {
+        const mediaRecorder = new MediaRecorder(mediaStream);
+        mediaRecorder.onstart = (event) => {
+            this.chunks = [];
+        };
+        mediaRecorder.ondataavailable = (event) => {
+            this.chunks.push(event.data);
+        };
+        mediaRecorder.onstop = (event) => {
+            const blob = new Blob(this.chunks, {'type': 'audio/ogg; codecs=opus'});
+            socket.emit('startTransmission', blob);
+        };
+
+        mediaRecorder.start();
+
+        setInterval(() => {
+            !isTransmitting && clearInterval();
+            mediaRecorder.stop();
+            mediaRecorder.start();
+        }, 100);
+    });
+
 }
 
-function stopSound() {
-    socket.emit('stopSound');
+function stopTransmission() {
+    socket.emit('stopTransmission');
+    isTransmitting = false;
 }
 
 function refreshName(newName) {
@@ -83,11 +132,9 @@ function refreshName(newName) {
 function displayToast(isDisplayed, senderName = "Loading...") {
     const toast = document.getElementById("toast");
     if (isDisplayed) {
-        console.log("yes");
         document.getElementById("speaker").innerHTML = senderName;
         toast.classList.remove("hidden");
     } else {
-        console.log("no");
         toast.classList.add("hidden");
     }
 }

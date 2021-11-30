@@ -30,9 +30,9 @@ function newConnection(socket) {
 
     refreshClientNumber();
     socket.on('setName', setClientName);
-    socket.on('boop', playAlert);
-    socket.on('startSound', sendSound);
-    socket.on('stopSound', stopSound);
+    socket.on('alert', playAlert);
+    socket.on('startTransmission', broadcastTransmission);
+    socket.on('stopTransmission', stopTransmission);
     socket.on("disconnect", () => {
         refreshClientNumber();
     });
@@ -40,7 +40,7 @@ function newConnection(socket) {
     function setClientName(newName) {
         if (newName) {
             socket.username = newName;
-        } else{
+        } else {
             setClientName(namegenerator());
         }
         socket.emit('refreshName', socket.username);
@@ -51,14 +51,14 @@ function newConnection(socket) {
         socket.broadcast.emit('playBoop', socket.username);
     }
 
-    function sendSound() {
+    function broadcastTransmission(transmission) {
         socket.broadcast.emit('openReceivingConnection', {
             senderName: socket.username,
-            data: "Here be Audio streaming using webRTC or something like it"
+            data: transmission
         });
     }
 
-    function stopSound() {
+    function stopTransmission() {
         socket.broadcast.emit('closeReceivingConnection');
     }
 

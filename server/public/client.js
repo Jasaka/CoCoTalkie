@@ -17,12 +17,8 @@ socket.on('clientNumber', (clientNumber) => {
     document.getElementById("clientnumber").innerHTML = clientNumber.toString()
 });
 
-socket.on('playBoop', (sentFromClientName) => {
-    const boop = new Audio('assets/boop.wav');
-    boop.muted = true;
-    boop.muted = false;
-    boop.play();
-    console.log(sentFromClientName);
+socket.on('playBoop', (senderName) => {
+    playSound(senderName);
 });
 
 socket.on('playSound', (data) => {
@@ -34,9 +30,8 @@ socket.on('refreshName', (newName) => {
 })
 
 socket.on('openReceivingConnection', (connection) => {
-    document.getElementById("speaker").innerHTML = connection.clientName;
     console.log(connection.data);
-    displayToast(true);
+    displayToast(true, connection.senderName);
 })
 
 socket.on('closeReceivingConnection', () => {
@@ -46,41 +41,53 @@ socket.on('closeReceivingConnection', () => {
 function setName() {
     const nameFromInput = document.getElementById('nameinput').value;
 
-    if (nameFromInput){
-        socket.emit('setName', nameFromInput);
-        refreshName(nameFromInput);
-    } else{
-        alert("Please input a Username if you want to set one!")
-    }
+    socket.emit('setName', nameFromInput);
+    refreshName(nameFromInput);
 }
 
-function sendBoop(){
+function sendBoop() {
     socket.emit('boop');
 }
 
-function sendSound(){
+function playSound(senderName){
+    displayToast(true, senderName);
+
+    const synth = new Tone.Synth().toDestination();
+    const now = Tone.now();
+    synth.triggerAttackRelease("C4", "8n", now);
+    synth.triggerAttackRelease("E4", "8n", now + 0.5);
+    synth.triggerAttackRelease("G4", "8n", now + 1);
+
+    synth.onsilence = () => displayToast(false);
+}
+
+function sendSound() {
     socket.emit('startSound');
     document.addEventListener(
         "mouseup",
         () => {
             stopSound();
         },
-        { once: true }
+        {once: true}
     );
 }
 
-function stopSound(){
+function stopSound() {
     socket.emit('stopSound');
 }
 
-function refreshName(newName){
+function refreshName(newName) {
     document.getElementById("client").innerHTML = newName;
 }
-function displayToast(state){
+
+function displayToast(isDisplayed, senderName = "Loading...") {
     const toast = document.getElementById("toast");
-    if (state){
+    if (isDisplayed) {
+        console.log("yes");
+        document.getElementById("speaker").innerHTML = senderName;
         toast.classList.remove("hidden");
     } else {
+        console.log("no");
         toast.classList.add("hidden");
     }
 }

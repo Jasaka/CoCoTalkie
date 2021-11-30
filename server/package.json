@@ -20,6 +20,7 @@
     "livereload": "^0.9.3",
     "path": "^0.12.7",
     "prettier": "^2.4.1",
-    "socket.io": "^4.4.0"
+    "socket.io": "^4.4.0",
+    "tone": "^14.7.77"
   }
 }

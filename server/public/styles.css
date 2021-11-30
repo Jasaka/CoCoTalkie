@@ -1,36 +1,6 @@
 * {
     font-family: "Open Sans", sans-serif;
-    font-size: 1em;
-    background: #000000;
-    color: #ffffff;
-}
-
-body{
-    position: relative;
-    margin: 0;
-    padding: 0;
-}
-
-header{
     text-align: center;
-}
-
-#viewport{
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translateY(-50%) translateX(-50%);
-    transform: translateY(-50%) translateX(-50%);
-}
-
-main{
-    text-align: center;
-}
-
-fieldset{
-    margin: 1em;
-    border-radius: 1em;
 }
 
 #broadcast-button{
@@ -45,27 +15,27 @@ fieldset{
 
 footer{
     padding-top: 2em;
-    text-align: center;
 }
 
-input {
-    min-height: 10vh;
-    min-width: 10vw;
-    padding: 1rem;
-    border-radius: 1em;
-    margin-bottom: 0.5em;
-    color: #5fff48;
-    text-align: center;
-}
+/*input {*/
+/*    min-height: 10vh;*/
+/*    min-width: 10vw;*/
+/*    padding: 1rem;*/
+/*    border-radius: 1em;*/
+/*    margin-bottom: 0.5em;*/
+/*    color: #5fff48;*/
+/*    text-align: center;*/
+/*}*/
 
-button {
-    min-height: 10vh;
-    min-width: 10vw;
-    border-radius: 1em;
-}
 
 #client{
     margin-top: 1rem;
+}
+
+h1{
+    font-family: "Merriweather Sans", sans-serif;
+    font-size: 3rem;
+    background: inherit;
 }
 
 .name{
@@ -77,12 +47,9 @@ button {
 #toast{
     position: absolute;
     z-index: 9999;
-    width: 20rem;
     border-bottom-right-radius: 1em;
     border-bottom-left-radius: 1em;
-    background: #043f09;
-    text-align: center;
-    top: 0px;
+    top: 0;
     left: 50%;
     -ms-transform: translateX(-50%);
     transform: translateX(-50%);

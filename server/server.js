@@ -1,4 +1,4 @@
-const verbose = false;
+const verbose = true;
 
 const path = require("path");
 const express = require('express');
@@ -25,31 +25,35 @@ const io = socket(server);
 io.sockets.on('connection', newConnection);
 
 function newConnection(socket) {
-    verbose && console.log("new connection: " + socket.id);
+    verbose && console.log("###### New Connection ######")
     setClientName(namegenerator());
 
-    setClientNumber();
-    socket.broadcast.emit('clientNumber', clientNumber);
+    refreshClientNumber();
     socket.on('setName', setClientName);
-    socket.on('boop', playBoop);
+    socket.on('boop', playAlert);
     socket.on('startSound', sendSound);
     socket.on('stopSound', stopSound);
     socket.on("disconnect", () => {
-        setClientNumber();
+        refreshClientNumber();
     });
 
     function setClientName(newName) {
-        socket.username = newName;
+        if (newName) {
+            socket.username = newName;
+        } else{
+            setClientName(namegenerator());
+        }
         socket.emit('refreshName', socket.username);
     }
 
-    function playBoop() {
+    function playAlert() {
+        verbose && console.log("Broadcasting Boop from: " + socket.username)
         socket.broadcast.emit('playBoop', socket.username);
     }
 
     function sendSound() {
         socket.broadcast.emit('openReceivingConnection', {
-            clientName: socket.username,
+            senderName: socket.username,
             data: "Here be Audio streaming using webRTC or something like it"
         });
     }
@@ -58,8 +62,10 @@ function newConnection(socket) {
         socket.broadcast.emit('closeReceivingConnection');
     }
 
-    function setClientNumber() {
+    function refreshClientNumber() {
         clientNumber = io.sockets.sockets.size;
+        verbose && console.log("ID: " + socket.id + " | Current Username: " + socket.username);
         socket.broadcast.emit('clientNumber', clientNumber);
+        socket.emit('clientNumber', clientNumber);
     }
 }

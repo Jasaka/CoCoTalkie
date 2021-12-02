@@ -24,7 +24,6 @@ document.getElementById('broadcast-button').oncontextmenu = (event) => {
 };
 
 socket.on('clientNumber', (clientNumber) => {
-    console.log(clientNumber);
     document.getElementById("clientnumber").innerHTML = clientNumber.toString()
 });
 
@@ -39,14 +38,8 @@ socket.on('playAlert', (data) => {
 socket.on('refreshName', (newName) => {
     refreshName(newName);
 })
-
 socket.on('openReceivingConnection', (connection) => {
-    isReceivingTransmission = true;
-    displayToast(true, connection.senderName);
-    console.log(connection);
-    const blob = new Blob([connection.data], {'type': 'audio/ogg; codecs=opus'});
-    audio.src = window.URL.createObjectURL(blob);
-    audio.play();
+    playTransmission(connection);
 })
 
 socket.on('closeReceivingConnection', () => {
@@ -95,6 +88,8 @@ function startTransmission() {
         {once: true}
     );
 
+    let intervalId;
+
     const constraints = {audio: true};
     navigator.mediaDevices.getUserMedia(constraints).then(function (mediaStream) {
         const mediaRecorder = new MediaRecorder(mediaStream);
@@ -107,22 +102,28 @@ function startTransmission() {
         mediaRecorder.onstop = (event) => {
             const blob = new Blob(this.chunks, {'type': 'audio/ogg; codecs=opus'});
             socket.emit('startTransmission', blob);
+            !isTransmitting && clearInterval(intervalId) && socket.emit('stopTransmission');
         };
 
         mediaRecorder.start();
-
-        setInterval(() => {
-            !isTransmitting && clearInterval();
+        intervalId = setInterval(() => {
             mediaRecorder.stop();
             mediaRecorder.start();
-        }, 100);
+        }, 200);
     });
-
 }
 
 function stopTransmission() {
-    socket.emit('stopTransmission');
     isTransmitting = false;
+    socket.emit('stopTransmission');
+}
+
+function playTransmission(connection) {
+    isReceivingTransmission = true;
+    displayToast(true, connection.senderName);
+    const blob = new Blob([connection.data], {'type': 'audio/ogg; codecs=opus'});
+    audio.src = window.URL.createObjectURL(blob);
+    audio.play();
 }
 
 function refreshName(newName) {

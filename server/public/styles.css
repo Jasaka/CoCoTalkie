@@ -1,6 +1,8 @@
 * {
     font-family: "Open Sans", sans-serif;
     text-align: center;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 #broadcast-button{
@@ -65,6 +67,5 @@ h1{
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    height: 150vh;
 }

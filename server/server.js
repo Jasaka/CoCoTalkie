@@ -1,22 +1,23 @@
 const verbose = true;
 
-const path = require("path");
+const fs = require('fs');
+const https = require('https');
 const express = require('express');
-const livereload = require("livereload");
-const connectLivereload = require("connect-livereload");
 const socket = require('socket.io');
 const namegenerator = require('./namegenerator');
 
-const liveReloadServer = livereload.createServer();
-liveReloadServer.watch(path.join(__dirname, 'public'));
-
 const app = express();
-const server = app.listen(64046);
-app.use(connectLivereload());
+const port = 64046;
+const options = {
+    key: fs.readFileSync('./ssl/localhost-key.pem'),
+    cert: fs.readFileSync('./ssl/localhost.pem'),
+};
+
+const server = https.createServer(options, app).listen(port, () => {
+    verbose && console.log("Express server listening on port " + port);
+});
 
 app.use(express.static('public'));
-
-verbose && console.log("Server is running");
 
 let clientNumber;
 
@@ -60,6 +61,7 @@ function newConnection(socket) {
 
     function stopTransmission() {
         socket.broadcast.emit('closeReceivingConnection');
+        setTimeout(() => socket.broadcast.emit('closeReceivingConnection'), 200)
     }
 
     function refreshClientNumber() {

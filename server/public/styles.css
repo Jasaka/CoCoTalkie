@@ -69,3 +69,9 @@ h1{
     width: 100vw;
     height: 150vh;
 }
+
+#broadcast-button:disabled, #broadcast-button:disabled:hover, #alert-button:disabled, #alert-button:disabled:hover{
+    background-color: #828582;
+    color: #ffffff;
+}
+

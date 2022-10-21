@@ -44,6 +44,7 @@ socket.on('openReceivingConnection', (connection) => {
 
 socket.on('closeReceivingConnection', () => {
     displayToast(false);
+    enableCommunicationButtons();
     isReceivingTransmission = false;
 })
 
@@ -68,12 +69,6 @@ function playAlert(senderName) {
     synth.triggerAttackRelease("C6", "8n", now + 0.2);
     synth.triggerAttackRelease("G6", "8n", now + 0.3);
     synth.triggerAttackRelease("C6", "8n", now + 0.4);
-    synth.triggerAttackRelease("G6", "8n", now + 0.5);
-    synth.triggerAttackRelease("C6", "8n", now + 0.6);
-    synth.triggerAttackRelease("G6", "8n", now + 0.7);
-    synth.triggerAttackRelease("C6", "8n", now + 0.8);
-    synth.triggerAttackRelease("G6", "8n", now + 0.9);
-    synth.triggerAttackRelease("C6", "8n", now + 1);
 
     synth.onsilence = () => displayToast(false);
 }
@@ -120,6 +115,7 @@ function stopTransmission() {
 
 function playTransmission(connection) {
     isReceivingTransmission = true;
+    disableCommunicationButtons();
     displayToast(true, connection.senderName);
     const blob = new Blob([connection.data], {'type': 'audio/ogg; codecs=opus'});
     audio.src = window.URL.createObjectURL(blob);
@@ -138,4 +134,15 @@ function displayToast(isDisplayed, senderName = "Loading...") {
     } else {
         toast.classList.add("hidden");
     }
+}
+
+function disableCommunicationButtons() {
+    document.getElementById("broadcast-button").disabled = true;
+    document.getElementById("alert-button").disabled = true;
+
+}
+
+function enableCommunicationButtons() {
+    document.getElementById("broadcast-button").disabled = false;
+    document.getElementById("alert-button").disabled = false;
 }

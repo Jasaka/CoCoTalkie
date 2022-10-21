@@ -24,11 +24,11 @@
 					onmousedown="enableCoCoTalkie()">Let's go!
 	</button>
 	<br />
-	<p class="text-xs">* Slight exaggerations possible</p>
+	<p class="text-xs">* Slight exaggerations and WebRTC problems on iOS 15 possible</p>
 	<br/>
-	<a href="https://coco.study">
+	<a href="https://advanced-clients.coco.study">
 		<button class="button bg-red-700 hover:bg-red-500 focus:bg-red-700 rounded py-2 px-4 my-8">
-			I don't wanna
+			Take me back
 		</button>
 	</a>
 </div>
@@ -49,15 +49,17 @@
 		</button>
 	</div>
 	<br/>
-	<button class="button bg-red-700 hover:bg-red-500 focus:bg-red-700 rounded py-2 px-4 my-8" onclick="sendAlert()">Alert
+	<button id="alert-button" class="button bg-red-700 hover:bg-red-600 focus:bg-red-700 rounded py-2 px-4 my-8" onclick="sendAlert()">Alert
 		Everyone
 	</button>
 	<br/>
-	<button class="button bg-green-700 focus:bg-green-700 hover:bg-green-500 rounded py-2 px-4" id="broadcast-button"
+	<button id="broadcast-button" class="button bg-green-700 focus:bg-green-700 hover:bg-green-600 rounded py-2 px-4"
 					onmousedown="startTransmission()" onmouseup="stopTransmission()">Press to send
 	</button>
 </main>
 <footer>
+	<a href="https://advanced-clients.coco.study" class="underline">← Back to Advanced Clients selection</a>
+	<br />
 	Number of connected Clients:
 	<text id="clientnumber">1</text>
 	<br/>
